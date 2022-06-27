@@ -16,6 +16,7 @@ class Book(models.Model):
     name = models.CharField(max_length=200)
     bookauthor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     user_id = models.CharField(max_length=200, null=True, blank=True)
+    cover = models.ImageField()
 
     def __str__(self):
         return self.name
