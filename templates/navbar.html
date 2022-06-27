@@ -2,11 +2,20 @@
     <h1>PIXEL</h1>
 </a>
 
-
 <form method="GET" action="{% url 'home' %}">
 
     <input type="text" name="q" placeholder="Search Books...." />
 </form>
+
+
+{% if request.user.is_authenticated %}
+<p>WELCOME {{request.user}}</p>
+<a href="{% url 'logout' %}">LOGOUT</a>
+
+{% else %}
+<a href="{% url 'login' %}">LOGIN</a>
+
+{% endif %}
 
 <hr>
 

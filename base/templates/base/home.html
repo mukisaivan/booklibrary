@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 
+
 {% block content %}
 
 <style>
@@ -14,7 +15,7 @@
 <div class="home-container">
 
     <div>
-        <h3>BROWSE BOOKSHELVES</h3>
+        <h2>BROWSE BOOKS</h2>
         <hr>
 
         <div>
@@ -34,13 +35,17 @@
 
         <h5>{{bookshelf_count}} Bookshelves Available</h5>
 
-        <a href='{% url "create-bookshelf" %}'>Create BookShelf</a>
+
+        <a href='{% url "create-bookshelf" %}'>Upload a Book</a>
+
 
         <div>
             {% for bookshelf in bookshelfs %}
             <div>
+                {% if request.user == bookshelf.librarian %}
                 <a href="{% url 'deletebookshelf' bookshelf.id %}">DELETE</a>
                 <a href="{% url 'updatebookshelf' bookshelf.id %}">Edit</a>
+                {% endif %}
                 <span>@{{bookshelf.librarian.username}}</span>
                 <h5>{{bookshelf.id}} -- <a href='{% url "bookshelf" bookshelf.id %}'> {{bookshelf.name}}</a></h5>
                 <small>{{bookshelf.book.name}}</small>

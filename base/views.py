@@ -1,14 +1,69 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from .models import Bookshelf, Book
+from django.contrib.auth.models import User
 from .forms import Bookshelfform
 from django.db.models import Q
 from django.http import HttpResponse
+from django.contrib.auth.forms import UserCreationForm
 
 # bookshelfs = [
 #     {'id': 1, 'name': 'lets learn python'},
 #     {'id': 2, 'name': 'design with me'},
 #     {'id': 3, 'name': 'front end developer'},
 # ]
+
+
+def loginPage(request):
+    page = 'login'
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == 'POST':
+        username = request.POST.get('username').lower()
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, 'User Does not Exist')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Username OR Password does not Exist')
+
+    context = {'page': page}
+    return render(request, 'base/login_register.html', context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('home')
+
+
+def registerPage(request):
+    form = UserCreationForm()
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)  # this freezes the form in time to ensure that if the user is valid the form is gona be crated right away
+            # therefore, we commit it to false so that we can get the user object
+
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+
+        else:
+            messages.error(request, 'An error occurred during registration')
+
+    return render(request, 'base/login_register.html', {'form': form})
 
 
 def home(request):
@@ -34,6 +89,7 @@ def bookshelf(request, pk):
     return render(request, 'base/bookshelf.html', context)
 
 
+@login_required(login_url='login')
 def createbookshelf(request):
     form = Bookshelfform()
     if request.method == 'POST':
@@ -45,9 +101,15 @@ def createbookshelf(request):
     return render(request, 'base/bookshelf_form.html', context)
 
 
+@login_required(login_url='login')
 def updatebookshelf(request, pk):
     bookshelf = Bookshelf.objects.get(id=pk)
     form = Bookshelfform(instance=bookshelf)
+
+    if request.user != bookshelf.librarian:
+        return HttpResponse('This bookshelf is not yours')
+
+
     if request.method == 'POST':
         form = Bookshelfform(request.POST, instance=bookshelf)
         if form.is_valid():
@@ -58,9 +120,18 @@ def updatebookshelf(request, pk):
     return render(request, 'base/bookshelf_form.html', context)
 
 
+@login_required(login_url='login')
 def deletebookshelf(request, pk):  # pk makes sure that you are dealing with certain items
     bookshelf = Bookshelf.objects.get(id=pk)
+
+    if request.user != bookshelf.librarian:
+        return HttpResponse('This bookshelf is not yours')
+
     if request.method == 'POST':
         bookshelf.delete()
         redirect('home')
     return render(request, 'base/delete.html', {'obj': bookshelf})
+
+
+def background(request):
+    pass
