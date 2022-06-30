@@ -34,9 +34,17 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            return redirect('home')
+            if user.is_admin or user.is_superuser:
+                return redirect('dashboard')
+            elif user.is_librarian:
+                return redirect('librarian')
+            else:
+                return redirect('student')
+
         else:
             messages.error(request, 'Username OR Password does not Exist')
+            return redirect('home')
+
 
     context = {'page': page}
     return render(request, 'base/login_register.html', context)
@@ -133,5 +141,15 @@ def deletebookshelf(request, pk):  # pk makes sure that you are dealing with cer
     return render(request, 'base/delete.html', {'obj': bookshelf})
 
 
-def background(request):
-    pass
+def librarian(request):
+    return render(request, 'librarian/home.html')
+
+
+def student(request):
+    return render(request, 'student/home.html')
+
+
+def dashboard(request):
+    return render(request, 'dashboard/home.html')
+
+
