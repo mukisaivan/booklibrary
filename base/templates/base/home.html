@@ -3,19 +3,21 @@
 
 {% block content %}
 
+
 <style>
 
     .home-container{
         display: grid;
         grid-template-columns: 1fr 3fr;
     }
+
 </style>
 
 
 <div class="home-container">
 
     <div>
-        <h2>BROWSE BOOKS</h2>
+        <h2>CATEGORIES</h2>
         <hr>
 
         <div>
@@ -24,31 +26,34 @@
 
         <div>
             {% for book in books %}
-                <div>
-                    <a href="{% url 'home' %}?q={{book.name}}">{{book.name}}</a>
-                </div>
+            <div>
+                <a href="{% url 'home' %}?q={{book.name}}">{{book.name}}</a>
+            </div>
             {% endfor %}
         </div>
     </div>
 
     <div>
 
-        <h5>{{bookshelf_count}} Bookshelves Available</h5>
+        <h5>{{bookshelf_count}} Books Available</h5>
 
-
-        <a href='{% url "create-bookshelf" %}'>Upload a Book</a>
-
+        <h3>
+        <a href='{% url "add-bookshelf" %}'>ADD A BOOK</a>
+        </h3>
 
         <div>
+
             {% for bookshelf in bookshelfs %}
+
             <div>
                 {% if request.user == bookshelf.librarian %}
                 <a href="{% url 'deletebookshelf' bookshelf.id %}">DELETE</a>
-                <a href="{% url 'updatebookshelf' bookshelf.id %}">Edit</a>
+                <a href="{% url 'editbookshelf' bookshelf.id %}">EDIT</a>
                 {% endif %}
                 <span>@{{bookshelf.librarian.username}}</span>
                 <h5>{{bookshelf.id}} -- <a href='{% url "bookshelf" bookshelf.id %}'> {{bookshelf.name}}</a></h5>
-                <small>{{bookshelf.book.name}}</small>
+                <small>{{bookshelf.bookCategory.name}}</small>
+
                 <hr>
             </div>
 
@@ -59,4 +64,6 @@
 
 </div>
 
+
 {% endblock content %}
+
