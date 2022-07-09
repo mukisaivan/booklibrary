@@ -1,22 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
-from django.db.models.deletion import CASCADE
 
 
 # Create your models here.
 
-class User(AbstractUser):
-    is_admin = models.BooleanField(default=False)
-    is_librarian = models.BooleanField(default=False)
-    is_student = models.BooleanField(default=False)
+# class User(AbstractUser):
+#
+#     is_admin = models.BooleanField(default=False)
+#     is_librarian = models.BooleanField(default=True)
+#     is_student = models.BooleanField(default=False)
+#
+#     class Meta:
+#         swappable = 'AUTH_USER_MODEL'
 
 
 class Book(models.Model):
     name = models.CharField(max_length=200)
-    bookauthor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    user_id = models.CharField(max_length=200, null=True, blank=True)
-    cover = models.ImageField(upload_to='base/covers', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -24,10 +23,12 @@ class Book(models.Model):
 
 class Bookshelf(models.Model):
     librarian = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
+    bookCategory = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)  # changed from book to bookCategory
     name = models.CharField(max_length=255)
     author = models.TextField(null=True, blank=True)
     borrowed = models.DateTimeField(auto_now=True)
+    user_id = models.CharField(max_length=200, null=True, blank=True)
+    cover = models.ImageField(upload_to='base/covers', null=True, blank=True)
 
 
     class Meta:
@@ -38,8 +39,6 @@ class Bookshelf(models.Model):
 
 
 class Borrowstatus(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
-    bookshelf = models.ForeignKey(Bookshelf, on_delete=models.CASCADE)
     updated = models.DateTimeField(auto_now=True)  # this is used to take stamps each time a student saves a book
     borrowdate = models.CharField(max_length=100)
 
@@ -70,6 +69,3 @@ class Payments(models.Model):
     book = ()
     student = ()
 
-
-class Bookmodel(models.Model):
-    pass
