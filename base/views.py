@@ -2,12 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Bookshelf, Book
+from .models import Book, Bookshelf
+
 from django.contrib.auth.models import User
+
+
 from .forms import Bookshelfform
 from django.db.models import Q
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
+from . import models
+
 
 # bookshelfs = [
 #     {'id': 1, 'name': 'lets learn python'},
@@ -34,16 +39,10 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            if user.is_admin or user.is_superuser:
-                return redirect('dashboard')
-            elif user.is_librarian:
-                return redirect('librarian')
-            else:
-                return redirect('student')
+            return redirect('home')
 
         else:
             messages.error(request, 'Username OR Password does not Exist')
-            return redirect('home')
 
 
     context = {'page': page}
@@ -75,12 +74,12 @@ def registerPage(request):
 
 
 def home(request):
-    books = Book.objects.all()
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
+    books = Book.objects.all()
 
     bookshelfs = Bookshelf.objects.filter(
-        Q(book__name__icontains=q) |
+        Q(bookCategory__name__icontains=q) |
         Q(name__icontains=q) |
         Q(borrowed__icontains=q)
     )
@@ -98,7 +97,7 @@ def bookshelf(request, pk):
 
 
 @login_required(login_url='login')
-def createbookshelf(request):
+def addbookshelf(request):
     form = Bookshelfform()
     if request.method == 'POST':
         form = Bookshelfform(request.POST)
@@ -109,17 +108,20 @@ def createbookshelf(request):
     return render(request, 'base/bookshelf_form.html', context)
 
 
-@login_required(login_url='login')
-def updatebookshelf(request, pk):
+# @login_required(login_url='login')
+def editbookshelf(request, pk):
     bookshelf = Bookshelf.objects.get(id=pk)
+
     form = Bookshelfform(instance=bookshelf)
 
     if request.user != bookshelf.librarian:
-        return HttpResponse('This bookshelf is not yours')
+
+        return HttpResponse('This book was not uploaded by you')
 
 
     if request.method == 'POST':
         form = Bookshelfform(request.POST, instance=bookshelf)
+
         if form.is_valid():
             form.save()
         return redirect('home')
@@ -128,7 +130,7 @@ def updatebookshelf(request, pk):
     return render(request, 'base/bookshelf_form.html', context)
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def deletebookshelf(request, pk):  # pk makes sure that you are dealing with certain items
     bookshelf = Bookshelf.objects.get(id=pk)
 
@@ -139,17 +141,4 @@ def deletebookshelf(request, pk):  # pk makes sure that you are dealing with cer
         bookshelf.delete()
         redirect('home')
     return render(request, 'base/delete.html', {'obj': bookshelf})
-
-
-def librarian(request):
-    return render(request, 'librarian/home.html')
-
-
-def student(request):
-    return render(request, 'student/home.html')
-
-
-def dashboard(request):
-    return render(request, 'dashboard/home.html')
-
 
