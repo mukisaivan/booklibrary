@@ -1,0 +1,25 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="library.views.home_view" />
+          <option value="library.views.adminclick_view" />
+          <option value="library.views.studentclick_view" />
+          <option value="library.views.adminsignup_view" />
+          <option value="library.views.studentsignup_view" />
+          <option value="library.views.afterlogin_view" />
+          <option value="library.views.addbook_view" />
+          <option value="library.views.viewbook_view" />
+          <option value="library.views.issuebook_view" />
+          <option value="library.views.contactus_view" />
+          <option value="library.views.aboutus_view" />
+          <option value="library.views.viewissuedbook_view" />
+          <option value="library.views.viewstudent_view" />
+          <option value="library.views.viewissuedbookbystudent" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
