@@ -108,7 +108,7 @@ def addbookshelf(request):
     return render(request, 'base/bookshelf_form.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def editbookshelf(request, pk):
     bookshelf = Bookshelf.objects.get(id=pk)
 

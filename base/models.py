@@ -23,12 +23,13 @@ class Book(models.Model):
 
 class Bookshelf(models.Model):
     librarian = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    bookCategory = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)  # changed from book to bookCategory
-    name = models.CharField(max_length=255)
-    author = models.TextField(null=True, blank=True)
-    borrowed = models.DateTimeField(auto_now=True)
     user_id = models.CharField(max_length=200, null=True, blank=True)
-    cover = models.ImageField(upload_to='base/covers', null=True, blank=True)
+    bookCategory = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)  # changed from book to bookCategory
+    name = models.CharField(max_length=255, null=True, blank=True)
+    author = models.CharField(max_length=200, null=True, blank=True)
+    book_image_url = models.CharField(max_length=2083, null=True, blank=True)
+    borrowed = models.DateTimeField(auto_now=True)
+    description = models.TextField(max_length=200, null=True, blank=True)
 
 
     class Meta:
