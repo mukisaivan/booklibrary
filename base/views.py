@@ -21,6 +21,13 @@ from . import models
 # ]
 
 
+def picture(request):
+    return render(request, 'base/pic.html')
+
+
+
+
+
 def loginPage(request):
     page = 'login'
     if request.user.is_authenticated:
