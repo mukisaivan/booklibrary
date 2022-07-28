@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bookshelf',
             name='book_image_url',
-            field=models.CharField(blank=True, max_length=2083, null=True),
+            field=models.ImageField(blank=True, max_length=2083, null=False),
         ),
         migrations.AlterField(
             model_name='bookshelf',

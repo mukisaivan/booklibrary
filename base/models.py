@@ -27,7 +27,7 @@ class Bookshelf(models.Model):
     bookCategory = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)  # changed from book to bookCategory
     name = models.CharField(max_length=255, null=True, blank=True)
     author = models.CharField(max_length=200, null=True, blank=True)
-    book_image_url = models.ImageField(max_length=2083, null=True, blank=True)
+    book_image_url = models.CharField(max_length=2083, null=True, blank=True)
     borrowed = models.DateTimeField(auto_now=True)
     description = models.TextField(max_length=200, null=True, blank=True)
 
@@ -35,13 +35,14 @@ class Bookshelf(models.Model):
     class Meta:
         ordering = ['-borrowed']
 
+
     def __str__(self):
         return self.name
 
 
 class Borrowstatus(models.Model):
     updated = models.DateTimeField(auto_now=True)  # this is used to take stamps each time a student saves a book
-    borrowdate = models.CharField(max_length=100)
+    borrowdate = models.DateTimeField(max_length=100)
 
     # (auto_now_add=True)  # this takes time stamp only when the user save the first time
 
