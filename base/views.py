@@ -103,7 +103,7 @@ def bookshelf(request, pk):
     return render(request, 'base/bookshelf.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def addbookshelf(request):
     form = Bookshelfform()
     if request.method == 'POST':
@@ -115,7 +115,7 @@ def addbookshelf(request):
     return render(request, 'base/bookshelf_form.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def editbookshelf(request, pk):
     bookshelf = Bookshelf.objects.get(id=pk)
 
@@ -137,7 +137,7 @@ def editbookshelf(request, pk):
     return render(request, 'base/bookshelf_form.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def deletebookshelf(request, pk):  # pk makes sure that you are dealing with certain items
     bookshelf = Bookshelf.objects.get(id=pk)
 
