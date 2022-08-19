@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import Book, Bookshelf
+from .models import Book, Bookshelf, Borrow
 
 from django.contrib.auth.models import User
 
@@ -99,7 +99,18 @@ def home(request):
 
 def bookshelf(request, pk):
     bookshelf = Bookshelf.objects.get(id=pk)
-    context = {'bookshelf': bookshelf}
+    bookshelf_borrows = bookshelf.borrow_set.all().order_by('-borrow_time')
+    borrowers = bookshelf.borrowers.all()
+    bookshelf.borrowers.add(request.user)
+
+    if request.method == 'POST':
+        borrow = Borrow.objects.create(
+            user = request.user,
+            bookshelf = bookshelf,
+        )
+        return redirect('bookshelf', pk=bookshelf.id)
+
+    context = {'bookshelf': bookshelf, 'bookshelf_borrows': bookshelf_borrows, 'borrowers': borrowers}
     return render(request, 'base/bookshelf.html', context)
 
 
@@ -149,3 +160,5 @@ def deletebookshelf(request, pk):  # pk makes sure that you are dealing with cer
         redirect('home')
     return render(request, 'base/delete.html', {'obj': bookshelf})
 
+def dashboard(request):
+    return render(request, 'base/dashboard.html')

@@ -1,25 +1,65 @@
 {% extends 'main.html' %}
-{% load static %}
-
 
 {% block content %}
 
-<h1>{{bookshelf.name}}</h1>
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="card" style="width: 18rem;">
-                    <img  src="{{ bookshelf.book_image_url }}" alt="Card image captured" class="card-img-top" >
-                <div class="card-body">
-                    <h5 class="card-title">{{bookshelf.name}}</h5>
-                    <p class="card-text">Description: {{bookshelf.description}}</p>
-                    <a href="#" class="btn btn-primary">BORROW BOOK</a>
+
+
+<style>
+
+    .bookshelf-container{
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+    }
+</style>
+
+
+
+
+<div class="bookshelf-container">
+
+    <div>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                            <img  src="{{ bookshelf.book_image_url }}" , width="300", height="200" alt="Card image captured" class="card-img-top" >
+                        <div class="card-body">
+                            <h5 class="card-title">{{bookshelf.name}}</h5>
+                            <p class="card-text">Description: {{bookshelf.description}}</p>
+
+                            <div class="borrow-form">
+                                <form method="post" action="">
+                                {% csrf_token %}
+                                <input type="submit"   value="BORROW BOOK"/>
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div>
+        <h3>BORROWERS</h3>
+        <hr>
+        {% for borrow in bookshelf_borrows %}
+            <div>
+                <big>{{borrow.user}} borrowed {{borrow.borrow_time|timesince}} ago</big>
+            </div>
+        {% endfor %}
+    </div>
+
 </div>
-{% endblock content %}
+
+{% endblock %}
+
+
+
 
 
