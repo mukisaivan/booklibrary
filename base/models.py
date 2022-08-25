@@ -1,8 +1,5 @@
 from django.db import models
-from django.template.defaultfilters import slugify
-from django.utils import timezone
 from django.contrib.auth.models import User
-from uuid import uuid4
 
 
 class Book(models.Model):
@@ -33,8 +30,6 @@ class Bookshelf(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        self.user_id = str(uuid4()).split('-')[4]
 
 
 
