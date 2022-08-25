@@ -21,8 +21,6 @@ class Bookshelf(models.Model):
     borrow_time = models.DateTimeField(auto_now_add=True)
     return_time = models.DateTimeField(auto_now=True)
 
-    # date_created = models.DateTimeField(blank=True, null=True)
-    # last_updated = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         ordering = ['-borrow_time', '-return_time']
@@ -32,13 +30,6 @@ class Bookshelf(models.Model):
 
 
 
-
-
-    # def save(self, *args, **kwargs):
-    #     if self.date_created is None:
-    #         self.date_created = timezone.localtime(timezone.now())
-    #     if self.last_updated is None:
-    #         self.last_updated = timezone.localtime(timezone.now())
 
 
 class Borrowstatus(models.Model):
