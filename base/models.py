@@ -29,9 +29,6 @@ class Bookshelf(models.Model):
         return self.name
 
 
-
-
-
 class Borrowstatus(models.Model):
     updated = models.DateTimeField(auto_now=True)
     borrowdate = models.CharField(max_length=100)

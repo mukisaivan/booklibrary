@@ -13,13 +13,6 @@ from django.contrib.auth.forms import UserCreationForm
 from . import models
 
 
-# bookshelfs = [
-#     {'id': 1, 'name': 'lets learn python'},
-#     {'id': 2, 'name': 'design with me'},
-#     {'id': 3, 'name': 'front end developer'},
-# ]
-
-
 def picture(request):
     return render(request, 'base/pic.html')
 
