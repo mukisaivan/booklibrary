@@ -6,7 +6,6 @@ from .models import Book, Bookshelf, Borrow
 
 from django.contrib.auth.models import User
 
-
 from .forms import Bookshelfform
 from django.db.models import Q
 from django.http import HttpResponse
@@ -23,9 +22,6 @@ from . import models
 
 def picture(request):
     return render(request, 'base/pic.html')
-
-
-
 
 
 def loginPage(request):
@@ -51,7 +47,6 @@ def loginPage(request):
         else:
             messages.error(request, 'Username OR Password does not Exist')
 
-
     context = {'page': page}
     return render(request, 'base/login_register.html', context)
 
@@ -66,7 +61,8 @@ def registerPage(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)  # this freezes the form in time to ensure that if the user is valid the form is gona be crated right away
+            user = form.save(
+                commit=False)  # this freezes the form in time to ensure that if the user is valid the form is gona be crated right away
             # therefore, we commit it to false so that we can get the user object
 
             user.username = user.username.lower()
@@ -100,17 +96,16 @@ def home(request):
 def bookshelf(request, pk):
     bookshelf = Bookshelf.objects.get(id=pk)
     bookshelf_borrows = bookshelf.borrow_set.all().order_by('-borrow_time')
-    borrowers = bookshelf.borrowers.all()
-    bookshelf.borrowers.add(request.user)
+
 
     if request.method == 'POST':
         borrow = Borrow.objects.create(
-            user = request.user,
-            bookshelf = bookshelf,
+            user=request.user,
+            bookshelf=bookshelf,
         )
         return redirect('bookshelf', pk=bookshelf.id)
 
-    context = {'bookshelf': bookshelf, 'bookshelf_borrows': bookshelf_borrows, 'borrowers': borrowers}
+    context = {'bookshelf': bookshelf, 'bookshelf_borrows': bookshelf_borrows}
     return render(request, 'base/bookshelf.html', context)
 
 
@@ -133,9 +128,7 @@ def editbookshelf(request, pk):
     form = Bookshelfform(instance=bookshelf)
 
     if request.user != bookshelf.librarian:
-
         return HttpResponse('This book was not uploaded by you')
-
 
     if request.method == 'POST':
         form = Bookshelfform(request.POST, instance=bookshelf)
@@ -159,6 +152,7 @@ def deletebookshelf(request, pk):  # pk makes sure that you are dealing with cer
         bookshelf.delete()
         redirect('home')
     return render(request, 'base/delete.html', {'obj': bookshelf})
+
 
 def dashboard(request):
     return render(request, 'base/dashboard.html')

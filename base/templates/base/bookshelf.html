@@ -48,17 +48,17 @@
     <div>
         <h3>BORROWERS</h3>
         <hr>
-        {% for borrow in bookshelf_borrows %}
-            <div>
-                <big>{{borrow.user}} borrowed {{borrow.borrow_time|timesince}} ago</big>
-            </div>
-        {% endfor %}
+
+            {% for borrow in bookshelf_borrows %}
+                <div>
+                    <big>{{borrow.user}} borrowed {{borrow.borrow_time|timesince}} ago</big>
+                </div>
+            {% endfor %}
     </div>
 
 </div>
 
 {% endblock %}
-
 
 
 
