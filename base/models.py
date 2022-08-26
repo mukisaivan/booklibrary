@@ -10,6 +10,7 @@ class Book(models.Model):
 
 
 class Bookshelf(models.Model):
+    publisher = models.CharField(max_length=200, null=True, blank=True)
     librarian = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     user_id = models.CharField(max_length=200, null=True, blank=True)
     bookCategory = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)  # changed from book to bookCategory
